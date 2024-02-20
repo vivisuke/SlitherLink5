@@ -6,7 +6,7 @@ extends Object
 const N_HORZ = 5
 const N_VERT = 5
 const N_CELLS = N_HORZ * N_VERT
-const EMPTY = -1
+const ANY = -1
 # 各格子点の接続状態
 const LINK_EMPTY = 0
 const LINK_UP = 1
@@ -30,7 +30,7 @@ func is_line(ix) -> bool:
 	return links[ix] > 0
 func _init():
 	clue_num.resize(N_CELLS)
-	clue_num.fill(EMPTY)
+	clue_num.fill(ANY)
 	links.resize(LINK_ARY_SIZE)
 	links.fill(LINK_WALL)
 	for y in range(N_VERT+1):
@@ -129,7 +129,7 @@ func move_line(ix) -> bool:
 	return false
 func make_loop_random():
 	make_loop()
-	for i in range(10):
+	for i in range(6):
 		var lst = []
 		for ix in range(xyToLinkIX(5, 5)+1):
 			if links[ix] == LINK_EMPTY: lst.push_back(ix)
