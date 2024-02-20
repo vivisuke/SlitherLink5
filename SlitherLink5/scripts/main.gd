@@ -15,6 +15,8 @@ const q1 = [-1,  3, -1,  3, -1,
 			]
 
 var bd
+var sx = 0
+var sy = 0
 var num_labels = []			# 線分数表示用ラベル
 
 var CBoard5x5 = preload("res://classes/Board5x5.gd")
@@ -23,10 +25,14 @@ func xyToLinkIX(x, y):		# x, y -> links インデックス、x: [0, N_HORZ]、y:
 	return x + (y + 1) * LINK_ARY_WIDTH
 func _ready():
 	bd = CBoard5x5.new()
-	bd.make_loop()
+	#bd.make_loop()
+	#bd.move_line2_left(xyToLinkIX(0, 1))
+	#bd.move_line2_right(xyToLinkIX(5, 2))
+	#bd.move_line2_up(xyToLinkIX(0, 0))
+	#bd.move_line2_down(xyToLinkIX(2, 2))
 	#bd.make_loop_random()
-	bd.links_to_nums()
-	#bd.set_clue_num(q1)
+	#bd.links_to_nums()
+	bd.set_clue_num(q1)
 	init_labels()
 	update_num_labels()
 	$Board/Grid.linkRt = bd.linkRt
@@ -54,5 +60,14 @@ func update_num_labels():
 		else:
 			num_labels[ix].text = "%d" % bd.clue_num[ix]
 		pass
+func _input(event):
+	if event is InputEventMouseButton && event.is_pressed():
+		bd.solve_SBS(sx, sy)
+		$Board/Grid.queue_redraw()
+		sx += 1
+		if sx > N_HORZ:
+			sy += 1
+			sx = 0
+	pass
 func _process(delta):
 	pass

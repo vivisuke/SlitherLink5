@@ -32,7 +32,7 @@ func _draw():
 				var px = x * CELL_WIDTH
 				var ix = xyToLinkIX(x, y)
 				if linkRt[ix] != 0 || linkDn[ix] != 0:
-					draw_circle(Vector2(px, py), R, LINK_COL)
+					#draw_circle(Vector2(px, py), R, LINK_COL)
 					if linkRt[ix] != 0:
 						draw_line(Vector2(px, py), Vector2(px+CELL_WIDTH, py) , LINK_COL, R*2)
 					if linkDn[ix] != 0:
