@@ -21,6 +21,8 @@ const LINK_ARY_SIZE = LINK_ARY_WIDTH * LINK_ARY_HEIGHT
 var clue_num = []
 var links = []			# 各格子点の上下左右連結フラグ
 
+func xyToIX(x, y):		# x, y -> clue_num インデックス、x: [0, N_HORZ)、y: [0, N_VERT)
+	return x + y * N_HORZ
 func xyToLinkIX(x, y):		# x, y -> links インデックス、x: [0, N_HORZ]、y: [0, N_VERT]
 	return x + (y + 1) * LINK_ARY_WIDTH
 func _init():
@@ -46,6 +48,22 @@ func set_clue_num(lst):
 	for i in range(N_CELLS):
 		clue_num[i] = lst[i]
 	pass
+func links_to_nums():
+	clue_num.fill(0)
+	var ix = 0
+	for y in range(N_VERT):
+		for x in range(N_HORZ):
+			#var ix = xyToIX(x, y)
+			var k = xyToLinkIX(x, y)
+			if (links[k] & LINK_RIGHT) != 0:
+				clue_num[ix] += 1
+			if (links[k] & LINK_DOWN) != 0:
+				clue_num[ix] += 1
+			if (links[k+1] & LINK_DOWN) != 0:
+				clue_num[ix] += 1
+			if (links[k+LINK_ARY_WIDTH] & LINK_RIGHT) != 0:
+				clue_num[ix] += 1
+			ix += 1
 func _ready():
 	pass
 func _process(delta):

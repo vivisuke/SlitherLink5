@@ -19,6 +19,7 @@ var CBoard5x5 = preload("res://classes/Board5x5.gd")
 func _ready():
 	bd = CBoard5x5.new()
 	bd.set_clue_num(q1)
+	bd.links_to_nums()
 	init_labels()
 	update_num_labels()
 	$Board/Grid.links = bd.links
