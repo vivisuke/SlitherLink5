@@ -4,6 +4,9 @@ const N_HORZ = 5
 const N_VERT = 5
 const N_CELLS = N_HORZ * N_VERT
 const CELL_WIDTH = 80
+const LINK_ARY_WIDTH = N_HORZ + 2		# 壁あり
+const LINK_ARY_HEIGHT = N_VERT + 3		# 壁あり
+const LINK_ARY_SIZE = LINK_ARY_WIDTH * LINK_ARY_HEIGHT
 const q1 = [-1,  3, -1,  3, -1,
 			 2, -1, -1, -1,  2,
 			-1, -1,  2, -1, -1,
@@ -16,9 +19,19 @@ var num_labels = []			# 線分数表示用ラベル
 
 var CBoard5x5 = preload("res://classes/Board5x5.gd")
 
+func xyToLinkIX(x, y):		# x, y -> links インデックス、x: [0, N_HORZ]、y: [0, N_VERT]
+	return x + (y + 1) * LINK_ARY_WIDTH
 func _ready():
 	bd = CBoard5x5.new()
 	bd.set_clue_num(q1)
+	bd.move_line2_up(xyToLinkIX(2, 0))
+	#bd.move_line2_up(xyToLinkIX(4, 0))
+	bd.move_line2_right(xyToLinkIX(5, 1))
+	bd.move_line2_left(xyToLinkIX(3, 2))
+	bd.move_line2_left(xyToLinkIX(0, 2))
+	bd.move_line2_down(xyToLinkIX(1, 5))
+	bd.move_line2_down(xyToLinkIX(3, 5))
+	bd.move_line2_right(xyToLinkIX(5, 4))
 	bd.links_to_nums()
 	init_labels()
 	update_num_labels()

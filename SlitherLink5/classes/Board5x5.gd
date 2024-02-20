@@ -25,6 +25,8 @@ func xyToIX(x, y):		# x, y -> clue_num インデックス、x: [0, N_HORZ)、y: 
 	return x + y * N_HORZ
 func xyToLinkIX(x, y):		# x, y -> links インデックス、x: [0, N_HORZ]、y: [0, N_VERT]
 	return x + (y + 1) * LINK_ARY_WIDTH
+func is_line(ix) -> bool:
+	return links[ix] > 0
 func _init():
 	clue_num.resize(N_CELLS)
 	clue_num.fill(EMPTY)
@@ -36,12 +38,16 @@ func _init():
 	# for Test
 	links[xyToLinkIX(1, 1)] = LINK_RIGHT | LINK_DOWN
 	links[xyToLinkIX(2, 1)] = LINK_LEFT | LINK_RIGHT
-	links[xyToLinkIX(3, 1)] = LINK_LEFT | LINK_DOWN
+	links[xyToLinkIX(3, 1)] = LINK_LEFT | LINK_RIGHT
+	links[xyToLinkIX(4, 1)] = LINK_LEFT | LINK_DOWN
 	links[xyToLinkIX(1, 2)] = LINK_UP | LINK_DOWN
-	links[xyToLinkIX(3, 2)] = LINK_UP | LINK_DOWN
-	links[xyToLinkIX(1, 3)] = LINK_RIGHT | LINK_UP
-	links[xyToLinkIX(2, 3)] = LINK_LEFT | LINK_RIGHT
-	links[xyToLinkIX(3, 3)] = LINK_LEFT | LINK_UP
+	links[xyToLinkIX(4, 2)] = LINK_UP | LINK_DOWN
+	links[xyToLinkIX(1, 3)] = LINK_UP | LINK_DOWN
+	links[xyToLinkIX(4, 3)] = LINK_UP | LINK_DOWN
+	links[xyToLinkIX(1, 4)] = LINK_RIGHT | LINK_UP
+	links[xyToLinkIX(2, 4)] = LINK_LEFT | LINK_RIGHT
+	links[xyToLinkIX(3, 4)] = LINK_LEFT | LINK_RIGHT
+	links[xyToLinkIX(4, 4)] = LINK_LEFT | LINK_UP
 	#
 	pass
 func set_clue_num(lst):
@@ -64,6 +70,52 @@ func links_to_nums():
 			if (links[k+LINK_ARY_WIDTH] & LINK_RIGHT) != 0:
 				clue_num[ix] += 1
 			ix += 1
+# ２セル縦方向ラインを右に１セルずらす
+# 前提：links[ix] は空欄
+func move_line2_right(ix) -> bool:
+	#print("ix = ", ix)
+	#print(links[ix+LINK_ARY_WIDTH], " ", links[ix-1], " ", links[ix+LINK_ARY_WIDTH-1])
+	if links[ix+LINK_ARY_WIDTH] != LINK_EMPTY || !is_line(ix-1) || !is_line(ix+LINK_ARY_WIDTH-1):
+		return false
+	if (links[ix-1] & LINK_DOWN) == 0: return false		# 線分が連続していない場合
+	links[ix] = LINK_LEFT | LINK_DOWN
+	links[ix+LINK_ARY_WIDTH] = LINK_LEFT | LINK_UP
+	links[ix-1] ^= LINK_RIGHT | LINK_DOWN
+	links[ix+LINK_ARY_WIDTH-1] ^= LINK_RIGHT | LINK_UP
+	return true
+# ２セル縦方向ラインを左に１セルずらす
+# 前提：links[ix] は空欄
+func move_line2_left(ix) -> bool:
+	if links[ix+LINK_ARY_WIDTH] != LINK_EMPTY || !is_line(ix+1) || !is_line(ix+LINK_ARY_WIDTH+1):
+		return false
+	if (links[ix+1] & LINK_DOWN) == 0: return false		# 線分が連続していない場合
+	links[ix] = LINK_RIGHT | LINK_DOWN
+	links[ix+LINK_ARY_WIDTH] = LINK_RIGHT | LINK_UP
+	links[ix+1] ^= LINK_LEFT | LINK_DOWN
+	links[ix+LINK_ARY_WIDTH+1] ^= LINK_LEFT | LINK_UP
+	return true
+# ２セル縦方向ラインを上に１セルずらす
+# 前提：links[ix] は空欄
+func move_line2_up(ix) -> bool:
+	if links[ix+1] != LINK_EMPTY || !is_line(ix+LINK_ARY_WIDTH) || !is_line(ix+LINK_ARY_WIDTH+1):
+		return false
+	if (links[ix+LINK_ARY_WIDTH] & LINK_RIGHT) == 0: return false		# 線分が連続していない場合
+	links[ix] = LINK_RIGHT | LINK_DOWN
+	links[ix+1] = LINK_LEFT | LINK_DOWN
+	links[ix+LINK_ARY_WIDTH] ^= LINK_RIGHT | LINK_UP
+	links[ix+LINK_ARY_WIDTH+1] ^= LINK_LEFT | LINK_UP
+	return true
+# ２セル縦方向ラインを下に１セルずらす
+# 前提：links[ix] は空欄
+func move_line2_down(ix) -> bool:
+	if links[ix+1] != LINK_EMPTY || !is_line(ix-LINK_ARY_WIDTH) || !is_line(ix-LINK_ARY_WIDTH+1):
+		return false
+	if (links[ix-LINK_ARY_WIDTH] & LINK_RIGHT) == 0: return false		# 線分が連続していない場合
+	links[ix] = LINK_RIGHT | LINK_UP
+	links[ix+1] = LINK_LEFT | LINK_UP
+	links[ix-LINK_ARY_WIDTH] ^= LINK_RIGHT | LINK_DOWN
+	links[ix-LINK_ARY_WIDTH+1] ^= LINK_LEFT | LINK_DOWN
+	return true
 func _ready():
 	pass
 func _process(delta):
