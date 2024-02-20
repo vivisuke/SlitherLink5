@@ -23,13 +23,15 @@ func xyToLinkIX(x, y):		# x, y -> links インデックス、x: [0, N_HORZ]、y:
 	return x + (y + 1) * LINK_ARY_WIDTH
 func _ready():
 	bd = CBoard5x5.new()
-	#bd.make_loop()
+	bd.make_loop()
 	#bd.make_loop_random()
-	bd.set_clue_num(q1)
-	#bd.links_to_nums()
+	bd.links_to_nums()
+	#bd.set_clue_num(q1)
 	init_labels()
 	update_num_labels()
-	$Board/Grid.links = bd.links
+	$Board/Grid.linkRt = bd.linkRt
+	$Board/Grid.linkDn = bd.linkDn
+	#$Board/Grid.links = bd.links
 	$Board/Grid.queue_redraw()
 	pass # Replace with function body.
 func init_labels():

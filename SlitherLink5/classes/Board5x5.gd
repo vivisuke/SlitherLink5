@@ -20,6 +20,8 @@ const LINK_ARY_SIZE = LINK_ARY_WIDTH * LINK_ARY_HEIGHT
 
 var clue_num = []
 var links = []			# 各格子点の上下左右連結フラグ
+var linkRt = []			# 各格子点の右連結フラグ、1 for 連結、0 for 非連結
+var linkDn = []			# 各格子点の下連結フラグ
 var dir_order = [LINK_UP, LINK_DOWN, LINK_LEFT, LINK_RIGHT]
 
 func xyToIX(x, y):		# x, y -> clue_num インデックス、x: [0, N_HORZ)、y: [0, N_VERT)
@@ -33,22 +35,40 @@ func _init():
 	clue_num.fill(ANY)
 	links.resize(LINK_ARY_SIZE)
 	links.fill(LINK_WALL)
+	linkRt.resize(LINK_ARY_SIZE)
+	linkRt.fill(0)
+	linkDn.resize(LINK_ARY_SIZE)
+	linkDn.fill(0)
 	for y in range(N_VERT+1):
 		for x in range(N_HORZ+1):
 			links[xyToLinkIX(x, y)] = LINK_EMPTY
 func make_loop():
-	links[xyToLinkIX(1, 1)] = LINK_RIGHT | LINK_DOWN
-	links[xyToLinkIX(2, 1)] = LINK_LEFT | LINK_RIGHT
-	links[xyToLinkIX(3, 1)] = LINK_LEFT | LINK_RIGHT
-	links[xyToLinkIX(4, 1)] = LINK_LEFT | LINK_DOWN
-	links[xyToLinkIX(1, 2)] = LINK_UP | LINK_DOWN
-	links[xyToLinkIX(4, 2)] = LINK_UP | LINK_DOWN
-	links[xyToLinkIX(1, 3)] = LINK_UP | LINK_DOWN
-	links[xyToLinkIX(4, 3)] = LINK_UP | LINK_DOWN
-	links[xyToLinkIX(1, 4)] = LINK_RIGHT | LINK_UP
-	links[xyToLinkIX(2, 4)] = LINK_LEFT | LINK_RIGHT
-	links[xyToLinkIX(3, 4)] = LINK_LEFT | LINK_RIGHT
-	links[xyToLinkIX(4, 4)] = LINK_LEFT | LINK_UP
+	if true:
+		linkDn[xyToLinkIX(1, 1)] = 1
+		linkRt[xyToLinkIX(1, 1)] = 1
+		linkRt[xyToLinkIX(2, 1)] = 1
+		linkRt[xyToLinkIX(3, 1)] = 1
+		linkDn[xyToLinkIX(4, 1)] = 1
+		linkDn[xyToLinkIX(1, 2)] = 1
+		linkDn[xyToLinkIX(4, 2)] = 1
+		linkDn[xyToLinkIX(1, 3)] = 1
+		linkDn[xyToLinkIX(4, 3)] = 1
+		linkRt[xyToLinkIX(1, 4)] = 1
+		linkRt[xyToLinkIX(2, 4)] = 1
+		linkRt[xyToLinkIX(3, 4)] = 1
+	else:
+		links[xyToLinkIX(1, 1)] = LINK_RIGHT | LINK_DOWN
+		links[xyToLinkIX(2, 1)] = LINK_LEFT | LINK_RIGHT
+		links[xyToLinkIX(3, 1)] = LINK_LEFT | LINK_RIGHT
+		links[xyToLinkIX(4, 1)] = LINK_LEFT | LINK_DOWN
+		links[xyToLinkIX(1, 2)] = LINK_UP | LINK_DOWN
+		links[xyToLinkIX(4, 2)] = LINK_UP | LINK_DOWN
+		links[xyToLinkIX(1, 3)] = LINK_UP | LINK_DOWN
+		links[xyToLinkIX(4, 3)] = LINK_UP | LINK_DOWN
+		links[xyToLinkIX(1, 4)] = LINK_RIGHT | LINK_UP
+		links[xyToLinkIX(2, 4)] = LINK_LEFT | LINK_RIGHT
+		links[xyToLinkIX(3, 4)] = LINK_LEFT | LINK_RIGHT
+		links[xyToLinkIX(4, 4)] = LINK_LEFT | LINK_UP
 func set_clue_num(lst):
 	for i in range(N_CELLS):
 		clue_num[i] = lst[i]
@@ -141,6 +161,20 @@ func make_loop_random():
 				#n_empty -= 2
 				break
 		if !moved: break
+# (0, 0) から順にリンクをランダムに決めていく
+func set_link_random():
+	for y in range(N_VERT+1):
+		for x in range(N_HORZ+1):
+			var k = xyToLinkIX(x, y)
+			var up = y != 0 && (links[k-LINK_ARY_WIDTH] & LINK_DOWN) != 0
+			var lt = x != 0 && (links[k-1] & LINK_RIGHT) != 0
+			if up && lt:	# 上・左に連結済み
+				links[k] = LINK_UP | LINK_LEFT
+			elif up || lt:		# 上または左にのみ連結済み
+				if up: links[k] = LINK_UP
+				else: links[k] = LINK_LEFT
+				
+	pass
 func _ready():
 	pass
 func _process(delta):

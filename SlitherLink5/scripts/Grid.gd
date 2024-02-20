@@ -19,26 +19,32 @@ const LINK_COL = Color.GREEN
 #const LINK_COL = Color.DARK_GREEN
 
 var links = []
+var linkRt = []
+var linkDn = []
 
 func xyToLinkIX(x, y):		# x, y -> links インデックス、x: [0, N_HORZ]、y: [0, N_VERT]
 	return x + (y + 1) * LINK_ARY_WIDTH
 func _draw():
-	if !links.is_empty():
+	if !linkRt.is_empty() && !linkDn.is_empty():
 		for y in range(N_VERT+1):
 			var py = y * CELL_WIDTH
 			for x in range(N_HORZ+1):
 				var px = x * CELL_WIDTH
 				var ix = xyToLinkIX(x, y)
-				if links[ix] != 0:
+				if linkRt[ix] != 0 || linkDn[ix] != 0:
 					draw_circle(Vector2(px, py), R, LINK_COL)
-					if (links[ix] & LINK_LEFT) != 0:
-						draw_line(Vector2(px, py), Vector2(px-CELL_WIDTH/2, py) , LINK_COL, R*2)
-					if (links[ix] & LINK_RIGHT) != 0:
-						draw_line(Vector2(px, py), Vector2(px+CELL_WIDTH/2, py) , LINK_COL, R*2)
-					if (links[ix] & LINK_UP) != 0:
-						draw_line(Vector2(px, py), Vector2(px, py-CELL_WIDTH/2) , LINK_COL, R*2)
-					if (links[ix] & LINK_DOWN) != 0:
-						draw_line(Vector2(px, py), Vector2(px, py+CELL_WIDTH/2) , LINK_COL, R*2)
+					if linkRt[ix] != 0:
+						draw_line(Vector2(px, py), Vector2(px+CELL_WIDTH, py) , LINK_COL, R*2)
+					if linkDn[ix] != 0:
+						draw_line(Vector2(px, py), Vector2(px, py+CELL_WIDTH) , LINK_COL, R*2)
+					#if (links[ix] & LINK_LEFT) != 0:
+					#	draw_line(Vector2(px, py), Vector2(px-CELL_WIDTH/2, py) , LINK_COL, R*2)
+					#if (links[ix] & LINK_RIGHT) != 0:
+					#	draw_line(Vector2(px, py), Vector2(px+CELL_WIDTH/2, py) , LINK_COL, R*2)
+					#if (links[ix] & LINK_UP) != 0:
+					#	draw_line(Vector2(px, py), Vector2(px, py-CELL_WIDTH/2) , LINK_COL, R*2)
+					#if (links[ix] & LINK_DOWN) != 0:
+					#	draw_line(Vector2(px, py), Vector2(px, py+CELL_WIDTH/2) , LINK_COL, R*2)
 				pass
 		pass
 	for y in range(N_VERT+1):
