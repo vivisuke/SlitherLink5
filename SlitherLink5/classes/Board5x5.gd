@@ -20,6 +20,7 @@ const LINK_ARY_SIZE = LINK_ARY_WIDTH * LINK_ARY_HEIGHT
 
 var clue_num = []
 var links = []			# 各格子点の上下左右連結フラグ
+var dir_order = [LINK_UP, LINK_DOWN, LINK_LEFT, LINK_RIGHT]
 
 func xyToIX(x, y):		# x, y -> clue_num インデックス、x: [0, N_HORZ)、y: [0, N_VERT)
 	return x + y * N_HORZ
@@ -35,7 +36,7 @@ func _init():
 	for y in range(N_VERT+1):
 		for x in range(N_HORZ+1):
 			links[xyToLinkIX(x, y)] = LINK_EMPTY
-	# for Test
+func make_loop():
 	links[xyToLinkIX(1, 1)] = LINK_RIGHT | LINK_DOWN
 	links[xyToLinkIX(2, 1)] = LINK_LEFT | LINK_RIGHT
 	links[xyToLinkIX(3, 1)] = LINK_LEFT | LINK_RIGHT
@@ -48,8 +49,6 @@ func _init():
 	links[xyToLinkIX(2, 4)] = LINK_LEFT | LINK_RIGHT
 	links[xyToLinkIX(3, 4)] = LINK_LEFT | LINK_RIGHT
 	links[xyToLinkIX(4, 4)] = LINK_LEFT | LINK_UP
-	#
-	pass
 func set_clue_num(lst):
 	for i in range(N_CELLS):
 		clue_num[i] = lst[i]
@@ -116,6 +115,32 @@ func move_line2_down(ix) -> bool:
 	links[ix-LINK_ARY_WIDTH] ^= LINK_RIGHT | LINK_DOWN
 	links[ix-LINK_ARY_WIDTH+1] ^= LINK_LEFT | LINK_DOWN
 	return true
+func move_line(ix) -> bool:
+	dir_order.shuffle()
+	for i in range(dir_order.size()):
+		if dir_order[i] == LINK_UP:
+			if move_line2_up(ix): return true
+		if dir_order[i] == LINK_DOWN:
+			if move_line2_down(ix): return true
+		if dir_order[i] == LINK_LEFT:
+			if move_line2_left(ix): return true
+		if dir_order[i] == LINK_RIGHT:
+			if move_line2_right(ix): return true
+	return false
+func make_loop_random():
+	make_loop()
+	for i in range(10):
+		var lst = []
+		for ix in range(xyToLinkIX(5, 5)+1):
+			if links[ix] == LINK_EMPTY: lst.push_back(ix)
+		lst.shuffle()
+		var moved = false
+		for k in range(lst.size()):
+			if move_line(lst[k]):
+				moved = true
+				#n_empty -= 2
+				break
+		if !moved: break
 func _ready():
 	pass
 func _process(delta):
