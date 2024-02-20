@@ -31,8 +31,8 @@ func init_labels():
 			var label = Label.new()
 			num_labels.push_back(label)
 			label.add_theme_color_override("font_color", Color.BLACK)
-			label.add_theme_font_size_override("font_size", 50)
-			label.position = Vector2(px+18, py-3)
+			label.add_theme_font_size_override("font_size", 64)
+			label.position = Vector2(px+24, py-5)
 			label.text = str((x+y)%4)
 			$Board/Grid.add_child(label)
 func update_num_labels():

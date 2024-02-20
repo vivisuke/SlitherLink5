@@ -3,7 +3,7 @@ extends ColorRect
 const N_HORZ = 5
 const N_VERT = 5
 const CELL_WIDTH = 80
-const R = 2.5
+const R = 4
 
 func _draw():
 	for y in range(N_VERT+1):
