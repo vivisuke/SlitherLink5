@@ -21,6 +21,8 @@ func _ready():
 	bd.set_clue_num(q1)
 	init_labels()
 	update_num_labels()
+	$Board/Grid.links = bd.links
+	$Board/Grid.queue_redraw()
 	pass # Replace with function body.
 func init_labels():
 	for y in range(N_VERT):
