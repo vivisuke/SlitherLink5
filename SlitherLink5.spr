@@ -15,7 +15,7 @@
 0013 ● C 02/20            │ToDo│リンクを順に決めていく探索関数をとりあえず実装
 0014 ◎ C 02/21 02/21 0.001│ToDo│Board5x5：リンク情報を linkRt[], linkDn[] で管理
 0015 ◎ C 02/21 02/21 0.001│ToDo│Grid：linkRt[], linkDn[] を参照して連結線描画
-0016 ● C 02/21            │ToDo│
+0016 ◎ C 02/21 02/21 0.001│ToDo│links_to_nums()：linkRt[], linkDn[] を参照
 0017 ● C 02/21            │ToDo│
 0018 ● C 02/21            │ToDo│
 0019 ● C 02/21            │ToDo│

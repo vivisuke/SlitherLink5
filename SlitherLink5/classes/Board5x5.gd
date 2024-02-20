@@ -43,32 +43,30 @@ func _init():
 		for x in range(N_HORZ+1):
 			links[xyToLinkIX(x, y)] = LINK_EMPTY
 func make_loop():
-	if true:
-		linkDn[xyToLinkIX(1, 1)] = 1
-		linkRt[xyToLinkIX(1, 1)] = 1
-		linkRt[xyToLinkIX(2, 1)] = 1
-		linkRt[xyToLinkIX(3, 1)] = 1
-		linkDn[xyToLinkIX(4, 1)] = 1
-		linkDn[xyToLinkIX(1, 2)] = 1
-		linkDn[xyToLinkIX(4, 2)] = 1
-		linkDn[xyToLinkIX(1, 3)] = 1
-		linkDn[xyToLinkIX(4, 3)] = 1
-		linkRt[xyToLinkIX(1, 4)] = 1
-		linkRt[xyToLinkIX(2, 4)] = 1
-		linkRt[xyToLinkIX(3, 4)] = 1
-	else:
-		links[xyToLinkIX(1, 1)] = LINK_RIGHT | LINK_DOWN
-		links[xyToLinkIX(2, 1)] = LINK_LEFT | LINK_RIGHT
-		links[xyToLinkIX(3, 1)] = LINK_LEFT | LINK_RIGHT
-		links[xyToLinkIX(4, 1)] = LINK_LEFT | LINK_DOWN
-		links[xyToLinkIX(1, 2)] = LINK_UP | LINK_DOWN
-		links[xyToLinkIX(4, 2)] = LINK_UP | LINK_DOWN
-		links[xyToLinkIX(1, 3)] = LINK_UP | LINK_DOWN
-		links[xyToLinkIX(4, 3)] = LINK_UP | LINK_DOWN
-		links[xyToLinkIX(1, 4)] = LINK_RIGHT | LINK_UP
-		links[xyToLinkIX(2, 4)] = LINK_LEFT | LINK_RIGHT
-		links[xyToLinkIX(3, 4)] = LINK_LEFT | LINK_RIGHT
-		links[xyToLinkIX(4, 4)] = LINK_LEFT | LINK_UP
+	linkDn[xyToLinkIX(1, 1)] = 1
+	linkRt[xyToLinkIX(1, 1)] = 1
+	linkRt[xyToLinkIX(2, 1)] = 1
+	linkRt[xyToLinkIX(3, 1)] = 1
+	linkDn[xyToLinkIX(4, 1)] = 1
+	linkDn[xyToLinkIX(1, 2)] = 1
+	linkDn[xyToLinkIX(4, 2)] = 1
+	linkDn[xyToLinkIX(1, 3)] = 1
+	linkDn[xyToLinkIX(4, 3)] = 1
+	linkRt[xyToLinkIX(1, 4)] = 1
+	linkRt[xyToLinkIX(2, 4)] = 1
+	linkRt[xyToLinkIX(3, 4)] = 1
+	#links[xyToLinkIX(1, 1)] = LINK_RIGHT | LINK_DOWN
+	#links[xyToLinkIX(2, 1)] = LINK_LEFT | LINK_RIGHT
+	#links[xyToLinkIX(3, 1)] = LINK_LEFT | LINK_RIGHT
+	#links[xyToLinkIX(4, 1)] = LINK_LEFT | LINK_DOWN
+	#links[xyToLinkIX(1, 2)] = LINK_UP | LINK_DOWN
+	#links[xyToLinkIX(4, 2)] = LINK_UP | LINK_DOWN
+	#links[xyToLinkIX(1, 3)] = LINK_UP | LINK_DOWN
+	#links[xyToLinkIX(4, 3)] = LINK_UP | LINK_DOWN
+	#links[xyToLinkIX(1, 4)] = LINK_RIGHT | LINK_UP
+	#links[xyToLinkIX(2, 4)] = LINK_LEFT | LINK_RIGHT
+	#links[xyToLinkIX(3, 4)] = LINK_LEFT | LINK_RIGHT
+	#links[xyToLinkIX(4, 4)] = LINK_LEFT | LINK_UP
 func set_clue_num(lst):
 	for i in range(N_CELLS):
 		clue_num[i] = lst[i]
@@ -80,14 +78,22 @@ func links_to_nums():
 		for x in range(N_HORZ):
 			#var ix = xyToIX(x, y)
 			var k = xyToLinkIX(x, y)
-			if (links[k] & LINK_RIGHT) != 0:
+			if linkRt[k] != 0:
 				clue_num[ix] += 1
-			if (links[k] & LINK_DOWN) != 0:
+			if linkDn[k] != 0:
 				clue_num[ix] += 1
-			if (links[k+1] & LINK_DOWN) != 0:
+			if linkDn[k+1] != 0:
 				clue_num[ix] += 1
-			if (links[k+LINK_ARY_WIDTH] & LINK_RIGHT) != 0:
+			if linkRt[k+LINK_ARY_WIDTH] != 0:
 				clue_num[ix] += 1
+			#if (links[k] & LINK_RIGHT) != 0:
+			#	clue_num[ix] += 1
+			#if (links[k] & LINK_DOWN) != 0:
+			#	clue_num[ix] += 1
+			#if (links[k+1] & LINK_DOWN) != 0:
+			#	clue_num[ix] += 1
+			#if (links[k+LINK_ARY_WIDTH] & LINK_RIGHT) != 0:
+			#	clue_num[ix] += 1
 			ix += 1
 # ２セル縦方向ラインを右に１セルずらす
 # 前提：links[ix] は空欄
