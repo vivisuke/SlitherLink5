@@ -22,6 +22,8 @@ var clue_num = []
 var links = []			# 各格子点の上下左右連結フラグ
 var linkRt = []			# 各格子点の右連結フラグ、1 for 連結、0 for 非連結
 var linkDn = []			# 各格子点の下連結フラグ
+var non_linkRt = []			# 各格子点の右非連結フラグ、1 for 連結
+var non_linkDn = []			# 各格子点の下非連結フラグ、1 for 非連結
 var dir_order = [LINK_UP, LINK_DOWN, LINK_LEFT, LINK_RIGHT]
 
 func xyToIX(x, y):		# x, y -> clue_num インデックス、x: [0, N_HORZ)、y: [0, N_VERT)
@@ -40,6 +42,10 @@ func _init():
 	linkRt.fill(0)
 	linkDn.resize(LINK_ARY_SIZE)
 	linkDn.fill(0)
+	non_linkRt.resize(LINK_ARY_SIZE)
+	non_linkRt.fill(0)
+	non_linkDn.resize(LINK_ARY_SIZE)
+	non_linkDn.fill(0)
 	for y in range(N_VERT+1):
 		for x in range(N_HORZ+1):
 			links[xyToLinkIX(x, y)] = LINK_EMPTY
