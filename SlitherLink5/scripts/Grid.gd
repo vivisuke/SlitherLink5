@@ -14,9 +14,9 @@ const LINK_LEFT = 2
 const LINK_RIGHT = 4
 const LINK_DOWN = 8
 const LINK_WALL = -16					# 0xfff...fff0
-const LINK_ARY_WIDTH = N_HORZ + 2		# 壁あり
-const LINK_ARY_HEIGHT = N_VERT + 3		# 壁あり
-const LINK_ARY_SIZE = LINK_ARY_WIDTH * LINK_ARY_HEIGHT
+const ARY_WIDTH = N_HORZ + 2		# 壁あり
+const ARY_HEIGHT = N_VERT + 3		# 壁あり
+const ARY_SIZE = ARY_WIDTH * ARY_HEIGHT
 #
 const LINK_COL = Color.GREEN
 #const LINK_COL = Color.DARK_GREEN
@@ -27,14 +27,14 @@ var linkDn = []
 var non_linkRt = []
 var non_linkDn = []
 
-func xyToLinkIX(x, y):		# x, y -> links インデックス、x: [0, N_HORZ]、y: [0, N_VERT]
-	return x + (y + 1) * LINK_ARY_WIDTH
+func xyToIX(x, y):		# x, y -> links インデックス、x: [0, N_HORZ]、y: [0, N_VERT]
+	return x + (y + 1) * ARY_WIDTH
 func _draw():
 	for y in range(N_VERT+1):
 		var py = y * CELL_WIDTH
 		for x in range(N_HORZ+1):
 			var px = x * CELL_WIDTH
-			var ix = xyToLinkIX(x, y)
+			var ix = xyToIX(x, y)
 			if linkRt[ix] != 0:
 				draw_line(Vector2(px, py), Vector2(px+CELL_WIDTH, py) , LINK_COL, R*2)
 			if linkDn[ix] != 0:
