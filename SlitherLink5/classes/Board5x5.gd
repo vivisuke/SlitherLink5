@@ -63,8 +63,18 @@ func make_loop():
 	linkRt[xyToLinkIX(2, 4)] = 1
 	linkRt[xyToLinkIX(3, 4)] = 1
 func set_clue_num(lst):
-	for i in range(N_CELLS):
-		clue_num[i] = lst[i]
+	non_linkRt.fill(0)
+	non_linkDn.fill(0)
+	for k in range(N_CELLS):
+		clue_num[k] = lst[k]
+		if lst[k] == 0:
+			var x = k % N_HORZ
+			var y = k / N_HORZ
+			var ix = xyToLinkIX(x, y)
+			non_linkRt[ix] = 1
+			non_linkDn[ix] = 1
+			non_linkDn[ix+1] = 1
+			non_linkRt[ix+LINK_ARY_WIDTH] = 1
 	pass
 func links_to_nums():
 	clue_num.fill(0)

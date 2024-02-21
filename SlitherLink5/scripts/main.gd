@@ -13,6 +13,12 @@ const q1 = [-1,  3, -1,  3, -1,
 			 3, -1, -1, -1,  1,
 			-1,  3, -1,  1, -1,
 			]
+const q2 = [-1,  3, -1,  2, -1,
+			 1, -1,  2, -1,  3,
+			-1,  2, -1,  0, -1,
+			 2, -1,  3, -1,  3,
+			-1,  2, -1,  2, -1,
+			]
 
 var bd
 var sx = 0
@@ -32,11 +38,13 @@ func _ready():
 	#bd.move_line2_down(xyToLinkIX(2, 2))
 	#bd.make_loop_random()
 	#bd.links_to_nums()
-	bd.set_clue_num(q1)
+	bd.set_clue_num(q2)
 	init_labels()
 	update_num_labels()
 	$Board/Grid.linkRt = bd.linkRt
 	$Board/Grid.linkDn = bd.linkDn
+	$Board/Grid.non_linkRt = bd.non_linkRt
+	$Board/Grid.non_linkDn = bd.non_linkDn
 	#$Board/Grid.links = bd.links
 	$Board/Grid.queue_redraw()
 	pass # Replace with function body.
