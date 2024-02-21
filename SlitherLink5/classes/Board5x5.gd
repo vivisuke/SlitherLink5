@@ -193,6 +193,8 @@ func solve_SBS(x: int, y: int):
 	elif up || lt:
 		if x < N_HORZ:
 			linkRt[k] = 1
+			if y < N_VERT:
+				non_linkDn[k] = 1
 		else:
 			linkDn[k] = 1
 		pass
