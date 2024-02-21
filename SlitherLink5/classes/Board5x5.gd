@@ -177,22 +177,28 @@ func set_link_random():
 				
 	pass
 func solve_SBS(x: int, y: int):
-	var k = xyToIX(x, y)
-	var up: bool = y != 0 && linkDn[k-ARY_WIDTH] != 0
-	var lt: bool = x != 0 && linkRt[k-1] != 0
+	var ix = xyToIX(x, y)
+	var up: bool = y != 0 && linkDn[ix-ARY_WIDTH] != 0
+	var lt: bool = x != 0 && linkRt[ix-1] != 0
 	if up && lt:
 		pass
 	elif up || lt:
 		if x < N_HORZ:
-			linkRt[k] = 1
-			if y < N_VERT:
-				non_linkDn[k] = 1
+			if clue_num[ix] != 3:
+				linkRt[ix] = 1
+				if y < N_VERT:
+					non_linkDn[ix] = 1
+			else:
+				linkRt[ix] = 1
+				linkDn[ix+1] = 1
+				linkRt[ix+ARY_WIDTH] = 1
+				non_linkDn[ix] = 1
 		else:
-			linkDn[k] = 1
+			linkDn[ix] = 1
 		pass
 	else:
-		linkRt[k] = 1
-		linkDn[k] = 1
+		linkRt[ix] = 1
+		linkDn[ix] = 1
 func _ready():
 	pass
 func _process(delta):
