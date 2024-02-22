@@ -25,6 +25,11 @@ var linkDn = []			# 各格子点の下連結フラグ
 var non_linkRt = []			# 各格子点の右非連結フラグ、1 for 連結
 var non_linkDn = []			# 各格子点の下非連結フラグ、1 for 非連結
 var dir_order = [LINK_UP, LINK_DOWN, LINK_LEFT, LINK_RIGHT]
+var fwd = true
+var sx = -1				# 探索位置
+var sy = 0
+
+var main_obj
 
 func xyToIX(x, y):		# x, y -> links インデックス、x: [0, N_HORZ]、y: [0, N_VERT]
 	return x + (y + 1) * ARY_WIDTH
@@ -176,6 +181,64 @@ func set_link_random():
 				else: links[k] = LINK_LEFT
 				
 	pass
+# バックトラッキング探索
+func solve_FB():
+	if fwd:		# 末端に向かって探索中
+		sx += 1
+		if sx > N_HORZ:
+			sx = 0
+			sy += 1
+			if sy > N_VERT:
+				fwd = false
+				sy -= 1
+				sx = N_HORZ + 1
+	if !fwd:		# バックトラッキング中
+		sx -= 1
+		if sx < 0:
+			sx = N_HORZ
+			sy -= 1
+	var ix = xyToIX(sx, sy)
+	var up: bool = sy != 0 && linkDn[ix-ARY_WIDTH] != 0
+	var lt: bool = sx != 0 && linkRt[ix-1] != 0
+	if fwd:		# 末端に向かって探索中
+		if up && lt:		# 上・左連結済み
+			pass
+		elif up || lt:
+			if sx == N_HORZ:	# 右端の場合
+				linkDn[ix] = 1
+			elif sy == N_VERT:	# 下端の場合
+				linkRt[ix] = 1
+			else:
+				linkRt[ix] = 1
+				non_linkDn[ix] = 1
+		else:
+			linkRt[ix] = 1
+			linkDn[ix] = 1
+	else:		# バックトラッキング中
+		if up && lt:		# 上・左連結済み
+			pass
+		elif up || lt:
+			if linkRt[ix] == 1:
+				linkRt[ix] = 0
+				if sy < N_VERT:	# 下端ではない場合
+					non_linkRt[ix] = 1
+					linkDn[ix] = 1
+					non_linkDn[ix] = 0
+					fwd = true
+			else:
+				non_linkRt[ix] = 0
+				linkDn[ix] = 0
+		else:
+			if linkRt[ix] == 1:
+				linkRt[ix] = 0
+				linkDn[ix] = 0
+				non_linkRt[ix] = 1
+				non_linkDn[ix] = 1
+				fwd = true
+			else:
+				non_linkRt[ix] = 0
+				non_linkDn[ix] = 0
+
 func solve_SBS(x: int, y: int):
 	var ix = xyToIX(x, y)
 	var up: bool = y != 0 && linkDn[ix-ARY_WIDTH] != 0
@@ -183,22 +246,29 @@ func solve_SBS(x: int, y: int):
 	if up && lt:
 		pass
 	elif up || lt:
-		if x < N_HORZ:
+		if linkDn[ix] != 0:		# すでに下方に連結済み
+			pass
+		elif x < N_HORZ:		# 右端ではない場合
 			if clue_num[ix] != 3:
 				linkRt[ix] = 1
 				if y < N_VERT:
 					non_linkDn[ix] = 1
-			else:
+			else:	# clue_num[ix] == 3 の場合
 				linkRt[ix] = 1
 				linkDn[ix+1] = 1
 				linkRt[ix+ARY_WIDTH] = 1
 				non_linkDn[ix] = 1
+				non_linkRt[ix+ARY_WIDTH+1] = 1
+				non_linkDn[ix+ARY_WIDTH+1] = 1
 		else:
 			linkDn[ix] = 1
 		pass
 	else:
 		linkRt[ix] = 1
 		linkDn[ix] = 1
+		if clue_num[ix] == 2:
+			non_linkDn[ix+1] = 1
+			non_linkRt[ix+ARY_WIDTH] = 1
 func _ready():
 	pass
 func _process(delta):

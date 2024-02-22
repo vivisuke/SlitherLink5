@@ -1,5 +1,7 @@
 extends Node2D
 
+signal cont_search()		# 探索継続指示シグナル
+
 const N_HORZ = 5
 const N_VERT = 5
 const N_CELLS = N_HORZ * N_VERT
@@ -31,6 +33,7 @@ func xyToIX(x, y):		# x, y -> links インデックス、x: [0, N_HORZ]、y: [0,
 	return x + (y + 1) * ARY_WIDTH
 func _ready():
 	bd = CBoard5x5.new()
+	bd.main_obj = self
 	#bd.make_loop()
 	#bd.move_line2_left(xyToIX(0, 1))
 	#bd.move_line2_right(xyToIX(5, 2))
@@ -46,6 +49,9 @@ func _ready():
 	$Board/Grid.non_linkRt = bd.non_linkRt
 	$Board/Grid.non_linkDn = bd.non_linkDn
 	#$Board/Grid.links = bd.links
+	#
+	#bd.solve_coroutine(-1, -1)
+	bd.solve_FB()
 	$Board/Grid.queue_redraw()
 	pass # Replace with function body.
 func init_labels():
@@ -82,13 +88,17 @@ func update_num_color():
 					num_labels[ix].add_theme_color_override("font_color", col)
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
-		bd.solve_SBS(sx, sy)
-		$Board/Grid.queue_redraw()
-		update_num_color()
-		sx += 1
-		if sx > N_HORZ:
-			sy += 1
-			sx = 0
+		if false:
+			emit_signal("cont_search")
+		else:
+			bd.solve_FB()
+			#bd.solve_SBS(sx, sy)
+			$Board/Grid.queue_redraw()
+			update_num_color()
+			#sx += 1
+			#if sx > N_HORZ:
+			#	sy += 1
+			#	sx = 0
 	pass
 func _process(delta):
 	pass
