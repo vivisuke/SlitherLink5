@@ -95,7 +95,11 @@ func update_num_color():
 					col = Color.RED
 					satisfied = false
 				num_labels[ix].add_theme_color_override("font_color", col)
-				
+				#if bd.clue_num[ix] == 0:
+				#	print("０:")
+				#	print("n = ", n)		# 確定線数
+				#	print("n_edge = ", bd.n_edge(ix))
+				#	print("n_non_edge = ", bd.n_non_edge(ix))
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		if false:

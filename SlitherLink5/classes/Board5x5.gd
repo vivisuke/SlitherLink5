@@ -80,11 +80,11 @@ func set_clue_num(lst):
 			var i = x + y * N_HORZ
 			var ix = xyToIX(x, y)
 			clue_num[ix] = lst[i]
-			if clue_num[ix] == 0:
-				non_linkRt[ix] = 1
-				non_linkDn[ix] = 1
-				non_linkDn[ix+1] = 1
-				non_linkRt[ix+ARY_WIDTH] = 1
+			#if clue_num[ix] == 0:
+			#	non_linkRt[ix] = 1
+			#	non_linkDn[ix] = 1
+			#	non_linkDn[ix+1] = 1
+			#	non_linkRt[ix+ARY_WIDTH] = 1
 	pass
 func links_to_nums():
 	clue_num.fill(0)
