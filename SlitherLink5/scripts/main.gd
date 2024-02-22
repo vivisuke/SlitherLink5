@@ -83,7 +83,7 @@ func update_num_color():
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
 			var ix = xyToIX(x, y)
-			if bd.clue_num[ix] > 0:
+			if bd.clue_num[ix] >= 0:
 				var col = Color.BLACK
 				var n = bd.n_fixed_edge(ix)		# 確定線数
 				if n == 4:
