@@ -54,6 +54,7 @@ func _ready():
 	#bd.solve_coroutine(-1, -1)
 	bd.solve_FB()
 	$Board/Grid.queue_redraw()
+	bd.print_mate()
 	pass # Replace with function body.
 func init_labels():
 	num_labels.resize(ARY_SIZE)

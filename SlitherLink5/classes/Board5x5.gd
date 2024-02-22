@@ -22,8 +22,10 @@ var clue_num = []
 var links = []			# 各格子点の上下左右連結フラグ
 var linkRt = []			# 各格子点の右連結フラグ、1 for 連結、0 for 非連結
 var linkDn = []			# 各格子点の下連結フラグ
-var non_linkRt = []			# 各格子点の右非連結フラグ、1 for 連結
-var non_linkDn = []			# 各格子点の下非連結フラグ、1 for 非連結
+var non_linkRt = []		# 各格子点の右非連結フラグ、1 for 連結
+var non_linkDn = []		# 各格子点の下非連結フラグ、1 for 非連結
+var mate = []			# 連結状態保持配列、mate[ix] == ix for 非連結点, 
+						# mate[ix] == 0 非端点連結済み点, mate[ix] 反対側端点
 var dir_order = [LINK_UP, LINK_DOWN, LINK_LEFT, LINK_RIGHT]
 var fwd = true
 var sx = -1				# 探索位置
@@ -56,9 +58,19 @@ func _init():
 	non_linkRt.fill(0)
 	non_linkDn.resize(ARY_SIZE)
 	non_linkDn.fill(0)
+	mate.resize(ARY_SIZE)
 	for y in range(N_VERT+1):
 		for x in range(N_HORZ+1):
-			links[xyToIX(x, y)] = LINK_EMPTY
+			var ix = xyToIX(x, y)
+			mate[ix] = ix				# 非連結点
+			links[ix] = LINK_EMPTY
+func print_mate():
+	for y in range(N_VERT+1):
+		var txt = ""
+		for x in range(N_HORZ+1):
+			var ix = xyToIX(x, y)
+			txt += "%2d " % mate[ix]
+		print(txt)
 func make_loop():
 	linkDn[xyToIX(1, 1)] = 1
 	linkRt[xyToIX(1, 1)] = 1
