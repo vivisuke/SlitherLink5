@@ -41,6 +41,8 @@ func n_fixed_edge(ix):
 			non_linkRt[ix] + non_linkDn[ix] + non_linkRt[ix+ARY_WIDTH] + non_linkDn[ix+1])
 func n_edge(ix):
 	return linkRt[ix] + linkDn[ix] + linkRt[ix+ARY_WIDTH] + linkDn[ix+1]
+func n_non_edge(ix):
+	return non_linkRt[ix] + non_linkDn[ix] + non_linkRt[ix+ARY_WIDTH] + non_linkDn[ix+1]
 func _init():
 	clue_num.resize(ARY_SIZE)
 	clue_num.fill(ANY)
@@ -202,7 +204,8 @@ func solve_FB():
 	var lt: bool = sx != 0 && linkRt[ix-1] != 0
 	if fwd:		# 末端に向かって探索中
 		if up && lt:		# 上・左連結済み
-			pass
+			if sx < N_HORZ: non_linkRt[ix] = 1
+			if sy < N_VERT: non_linkDn[ix] = 1
 		elif up || lt:
 			if sx == N_HORZ:	# 右端の場合
 				linkDn[ix] = 1
@@ -216,7 +219,8 @@ func solve_FB():
 			linkDn[ix] = 1
 	else:		# バックトラッキング中
 		if up && lt:		# 上・左連結済み
-			pass
+			non_linkRt[ix] = 0
+			non_linkDn[ix] = 0
 		elif up || lt:
 			if linkRt[ix] == 1:
 				linkRt[ix] = 0

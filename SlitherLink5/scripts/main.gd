@@ -25,6 +25,7 @@ const q2 = [-1,  3, -1,  2, -1,
 var bd
 var sx = 0
 var sy = 0
+var satisfied = true		# 数字周囲線分数条件を満たしている
 var num_labels = []			# 線分数表示用ラベル
 
 var CBoard5x5 = preload("res://classes/Board5x5.gd")
@@ -78,14 +79,23 @@ func update_num_labels():
 			else:
 				num_labels[ix].text = "%d" % bd.clue_num[ix]
 func update_num_color():
+	satisfied = true
 	for y in range(N_VERT):
 		for x in range(N_HORZ):
 			var ix = xyToIX(x, y)
 			if bd.clue_num[ix] > 0:
-				var n = bd.n_fixed_edge(ix)
+				var col = Color.BLACK
+				var n = bd.n_fixed_edge(ix)		# 確定線数
 				if n == 4:
-					var col = Color.GRAY if bd.n_edge(ix) == bd.clue_num[ix] else Color.RED
-					num_labels[ix].add_theme_color_override("font_color", col)
+					col = Color.GRAY
+					if bd.n_edge(ix) != bd.clue_num[ix]:
+						col = Color.RED
+						satisfied = false
+				elif bd.n_non_edge(ix) > 4 - bd.clue_num[ix]:
+					col = Color.RED
+					satisfied = false
+				num_labels[ix].add_theme_color_override("font_color", col)
+				
 func _input(event):
 	if event is InputEventMouseButton && event.is_pressed():
 		if false:
@@ -95,10 +105,9 @@ func _input(event):
 			#bd.solve_SBS(sx, sy)
 			$Board/Grid.queue_redraw()
 			update_num_color()
-			#sx += 1
-			#if sx > N_HORZ:
-			#	sy += 1
-			#	sx = 0
+			if !satisfied:
+				bd.fwd = false
+				bd.sx += 1
 	pass
 func _process(delta):
 	pass
