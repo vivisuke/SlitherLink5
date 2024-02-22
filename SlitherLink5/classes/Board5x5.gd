@@ -213,10 +213,13 @@ func solve_FB():
 				linkRt[ix] = 1
 			else:
 				linkRt[ix] = 1
-				non_linkDn[ix] = 1
+				if sy < N_VERT: non_linkDn[ix] = 1
 		else:
-			linkRt[ix] = 1
-			linkDn[ix] = 1
+			if sx < N_HORZ && sy < N_VERT:
+				linkRt[ix] = 1
+				linkDn[ix] = 1
+			else:
+				fwd = false
 	else:		# バックトラッキング中
 		if up && lt:		# 上・左連結済み
 			non_linkRt[ix] = 0
