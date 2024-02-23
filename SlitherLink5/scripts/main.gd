@@ -22,6 +22,7 @@ const q2 = [-1,  3, -1,  2, -1,
 			-1,  2, -1,  2, -1,
 			]
 
+var n_steps = 0
 var bd
 var sx = 0
 var sy = 0
@@ -42,7 +43,7 @@ func _ready():
 	#bd.move_line2_down(xyToIX(2, 2))
 	#bd.make_loop_random()
 	#bd.links_to_nums()
-	bd.set_clue_num(q2)
+	bd.set_clue_num(q1)
 	init_labels()
 	update_num_labels()
 	$Board/Grid.linkRt = bd.linkRt
@@ -53,8 +54,10 @@ func _ready():
 	#
 	#bd.solve_coroutine(-1, -1)
 	bd.solve_FB()
+	n_steps = 1
+	$NStepLabel.text = "#%d" % n_steps
 	$Board/Grid.queue_redraw()
-	bd.print_mate()
+	#bd.print_mate()
 	pass # Replace with function body.
 func init_labels():
 	num_labels.resize(ARY_SIZE)
@@ -107,10 +110,16 @@ func _input(event):
 			emit_signal("cont_search")
 		else:
 			bd.solve_FB()
+			n_steps += 1
+			$NStepLabel.text = "#%d" % n_steps
+			#bd.print_mate()
 			#bd.solve_SBS(sx, sy)
 			$Board/Grid.queue_redraw()
 			update_num_color()
-			if !satisfied:
+			print("is_looped() = ", bd.is_looped(bd.sx, bd.sy))
+			print("is_solved = ", bd.is_solved())
+			print("saticefied = ", satisfied)
+			if !satisfied || (bd.is_looped(bd.sx, bd.sy) && !bd.is_solved()):
 				bd.fwd = false
 				bd.sx += 1
 	pass

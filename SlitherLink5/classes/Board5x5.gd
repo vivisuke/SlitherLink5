@@ -71,6 +71,7 @@ func print_mate():
 			var ix = xyToIX(x, y)
 			txt += "%2d " % mate[ix]
 		print(txt)
+	print()
 func make_loop():
 	linkDn[xyToIX(1, 1)] = 1
 	linkRt[xyToIX(1, 1)] = 1
@@ -195,6 +196,53 @@ func set_link_random():
 				else: links[k] = LINK_LEFT
 				
 	pass
+func is_solved() -> bool:
+	for y in range(N_VERT+1):
+		for x in range(N_HORZ+1):
+			var ix = xyToIX(x, y)
+			if n_edge(ix) != clue_num[ix]: return false
+	return true
+func is_looped(x, y) -> bool:
+	var ix = xyToIX(x, y)
+	var ix0 = ix
+	var ix9 = -1		# ひとつ前の位置
+	while true:
+		if linkRt[ix] != 0 && ix + 1 != ix9:
+			ix9 = ix
+			ix += 1
+		elif linkDn[ix] != 0 && ix + ARY_WIDTH != ix9:
+			ix9 = ix
+			ix += ARY_WIDTH
+		elif linkRt[ix-1] != 0 && ix - 1 != ix9:
+			ix9 = ix
+			ix -= 1
+		elif linkDn[ix-ARY_WIDTH] != 0 && ix - ARY_WIDTH != ix9:
+			ix9 = ix
+			ix -= ARY_WIDTH
+		else:
+			return false
+		if ix == ix0: return true
+	return false
+func link_right(ix):
+	linkRt[ix] = 1
+	non_linkRt[ix] = 0
+	#if mate[ix] != ix:	# ix が端点の場合
+	#	mate[mate[ix]] = ix+1		# 逆側端点
+	#	mate[ix+1] = mate[ix]
+	#	mate[ix] = 0
+	#else:
+	#	mate[ix] = ix + 1
+	#	mate[ix+1] = ix
+func link_down(ix):
+	linkDn[ix] = 1
+	non_linkDn[ix] = 0
+	#if mate[ix] != ix:	# ix が端点の場合
+	#	mate[mate[ix]] = ix+ARY_WIDTH		# 逆側端点
+	#	mate[ix+ARY_WIDTH] = mate[ix]
+	#	mate[ix] = 0
+	#else:
+	#	mate[ix] = ix + ARY_WIDTH
+	#	mate[ix+ARY_WIDTH] = ix
 # バックトラッキング探索
 func solve_FB():
 	if fwd:		# 末端に向かって探索中
@@ -211,6 +259,7 @@ func solve_FB():
 		if sx < 0:
 			sx = N_HORZ
 			sy -= 1
+	print("(%d, %d)" % [sx, sy])
 	var ix = xyToIX(sx, sy)
 	var up: bool = sy != 0 && linkDn[ix-ARY_WIDTH] != 0
 	var lt: bool = sx != 0 && linkRt[ix-1] != 0
@@ -228,8 +277,10 @@ func solve_FB():
 				if sy < N_VERT: non_linkDn[ix] = 1
 		else:
 			if sx < N_HORZ && sy < N_VERT:
-				linkRt[ix] = 1
-				linkDn[ix] = 1
+				link_right(ix)
+				link_down(ix)
+				#linkRt[ix] = 1
+				#linkDn[ix] = 1
 			else:
 				fwd = false
 	else:		# バックトラッキング中
