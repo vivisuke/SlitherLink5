@@ -27,6 +27,7 @@ var non_linkDn = []		# 各格子点の下非連結フラグ、1 for 非連結
 var mate = []			# 連結状態保持配列、mate[ix] == ix for 非連結点, 
 						# mate[ix] == 0 非端点連結済み点, mate[ix] 反対側端点
 var dir_order = [LINK_UP, LINK_DOWN, LINK_LEFT, LINK_RIGHT]
+var solved = false
 var fwd = true
 var sx = -1				# 探索位置
 var sy = 0
@@ -259,15 +260,17 @@ func link_down(ix):
 	#	mate[ix+ARY_WIDTH] = ix
 # バックトラッキング探索
 func solve_FB():
+	if solved: return
 	if fwd:		# 末端に向かって探索中
 		sx += 1
 		if sx > N_HORZ:
 			sx = 0
 			sy += 1
 			if sy > N_VERT:
-				fwd = false
-				sy -= 1
-				sx = N_HORZ + 1
+				if is_solved():
+					fwd = false
+					sy -= 1
+					sx = N_HORZ + 1
 	if !fwd:		# バックトラッキング中
 		sx -= 1
 		if sx < 0:
@@ -297,9 +300,6 @@ func solve_FB():
 				#linkDn[ix] = 1
 			else:
 				fwd = false
-		if is_constraint_violation() || (is_looped(sx, sy) && !is_solved()):
-				fwd = false
-				sx += 1
 	else:		# バックトラッキング中
 		if up && lt:		# 上・左連結済み
 			non_linkRt[ix] = 0
@@ -325,6 +325,12 @@ func solve_FB():
 			else:
 				non_linkRt[ix] = 0
 				non_linkDn[ix] = 0
+	var cv = is_constraint_violation()	# 制約違反あり
+	if cv || (is_looped(sx, sy) && !is_solved()):
+		fwd = false
+		sx += 1
+	elif !cv && is_looped(sx, sy) && is_solved():
+			solved = true
 
 func solve_SBS(x: int, y: int):
 	var ix = xyToIX(x, y)

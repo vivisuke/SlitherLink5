@@ -140,4 +140,5 @@ func _on_button_10_steps_pressed():
 	for i in range(10):
 		bd.solve_FB()
 		n_steps += 1
+		if bd.solved: break
 	pass # Replace with function body.
