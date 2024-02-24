@@ -142,19 +142,17 @@ func _on_button_1_steps_pressed():
 	$NStepLabel.text = "#%d" % n_steps
 	$Board/Grid.queue_redraw()
 	update_num_color()
+func do_n_steps(N):
+	for i in range(N):
+		bd.solve_FB()
+		n_steps += 1
+		if bd.solved || bd.failed: break
+	$NStepLabel.text = "#%d" % n_steps
+	$Board/Grid.queue_redraw()
+	update_num_color()
 func _on_button_10_steps_pressed():
-	for i in range(10):
-		bd.solve_FB()
-		n_steps += 1
-		if bd.solved || bd.failed: break
-	$NStepLabel.text = "#%d" % n_steps
-	$Board/Grid.queue_redraw()
-	update_num_color()
+	do_n_steps(10)
 func _on_button_100_steps_pressed():
-	for i in range(100):
-		bd.solve_FB()
-		n_steps += 1
-		if bd.solved || bd.failed: break
-	$NStepLabel.text = "#%d" % n_steps
-	$Board/Grid.queue_redraw()
-	update_num_color()
+	do_n_steps(100)
+func _on_button_1000_steps_pressed():
+	do_n_steps(1000)
