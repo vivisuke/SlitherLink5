@@ -49,7 +49,7 @@ func _ready():
 	#bd.move_line2_down(xyToIX(2, 2))
 	#bd.make_loop_random()
 	#bd.links_to_nums()
-	bd.set_clue_num(q2)
+	bd.set_clue_num(q1)
 	init_labels()
 	update_num_labels()
 	$Board/Grid.linkRt = bd.linkRt

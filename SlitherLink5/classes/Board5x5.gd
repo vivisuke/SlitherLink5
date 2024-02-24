@@ -215,7 +215,8 @@ func is_solved() -> bool:
 	for y in range(N_VERT+1):
 		for x in range(N_HORZ+1):
 			var ix = xyToIX(x, y)
-			if n_edge(ix) != clue_num[ix]: return false
+			if clue_num[ix] >= 0 && n_edge(ix) != clue_num[ix]:
+				return false
 	return true
 func is_looped(x, y) -> bool:
 	var ix = xyToIX(x, y)
@@ -276,7 +277,7 @@ func solve_FB():
 		if sx < 0:
 			sx = N_HORZ
 			sy -= 1
-	print("(%d, %d)" % [sx, sy])
+	#print("(%d, %d)" % [sx, sy])
 	var ix = xyToIX(sx, sy)
 	var up: bool = sy != 0 && linkDn[ix-ARY_WIDTH] != 0
 	var lt: bool = sx != 0 && linkRt[ix-1] != 0
@@ -325,12 +326,16 @@ func solve_FB():
 			else:
 				non_linkRt[ix] = 0
 				non_linkDn[ix] = 0
-	var cv = is_constraint_violation()	# 制約違反あり
-	if cv || (is_looped(sx, sy) && !is_solved()):
+	if is_constraint_violation():	# 制約違反あり
 		fwd = false
 		sx += 1
-	elif !cv && is_looped(sx, sy) && is_solved():
+	elif is_looped(sx, sy):
+		if is_solved():
 			solved = true
+			print("solved!")
+		else:
+			fwd = false
+			sx += 1
 
 func solve_SBS(x: int, y: int):
 	var ix = xyToIX(x, y)
