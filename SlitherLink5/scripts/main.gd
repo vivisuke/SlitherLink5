@@ -96,8 +96,9 @@ func update_num_color():
 			if bd.clue_num[ix] >= 0:
 				var col = Color.BLACK
 				var n = bd.n_fixed_edge(ix)		# 確定線数
-				if n == 4:
+				if bd.n_edge(ix) == bd.clue_num[ix]:
 					col = Color.GRAY
+				elif n == 4:
 					if bd.n_edge(ix) != bd.clue_num[ix]:
 						col = Color.RED
 						satisfied = false
