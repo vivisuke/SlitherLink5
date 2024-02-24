@@ -27,6 +27,12 @@ const q3 = [ 1,  3,  2,  2,  3,
 			 2, -1, -1, -1,  2,
 			 3,  1,  1,  1,  3,
 			]
+const q4 = [-1,  3, -1,  1, -1,
+			 3,  0, -1,  2,  3,
+			-1, -1, -1, -1, -1,
+			 2,  2, -1,  2,  2,
+			-1,  1, -1,  1, -1,
+			]
 
 var n_steps = 0
 var bd
@@ -49,7 +55,7 @@ func _ready():
 	#bd.move_line2_down(xyToIX(2, 2))
 	#bd.make_loop_random()
 	#bd.links_to_nums()
-	bd.set_clue_num(q1)
+	bd.set_clue_num(q4)
 	init_labels()
 	update_num_labels()
 	$Board/Grid.linkRt = bd.linkRt
@@ -144,10 +150,13 @@ func _on_button_1_steps_pressed():
 	$Board/Grid.queue_redraw()
 	update_num_color()
 func do_n_steps(N):
+	var start = Time.get_ticks_msec()
 	for i in range(N):
 		bd.solve_FB()
 		n_steps += 1
 		if bd.solved || bd.failed: break
+	var end = Time.get_ticks_msec()
+	print("dur = ", end - start, "msec")
 	$NStepLabel.text = "#%d" % n_steps
 	$Board/Grid.queue_redraw()
 	update_num_color()
