@@ -27,7 +27,8 @@ var non_linkDn = []		# 各格子点の下非連結フラグ、1 for 非連結
 var mate = []			# 連結状態保持配列、mate[ix] == ix for 非連結点, 
 						# mate[ix] == 0 非端点連結済み点, mate[ix] 反対側端点
 var dir_order = [LINK_UP, LINK_DOWN, LINK_LEFT, LINK_RIGHT]
-var solved = false
+var solved = false		# 解探索成功
+var failed = false		# 探索失敗
 var fwd = true
 var sx = -1				# 探索位置
 var sy = 0
@@ -261,7 +262,7 @@ func link_down(ix):
 	#	mate[ix+ARY_WIDTH] = ix
 # バックトラッキング探索
 func solve_FB():
-	if solved: return
+	if solved || failed: return
 	if fwd:		# 末端に向かって探索中
 		sx += 1
 		if sx > N_HORZ:
@@ -277,6 +278,10 @@ func solve_FB():
 		if sx < 0:
 			sx = N_HORZ
 			sy -= 1
+			if sy < 0:
+				print("failed.")
+				failed = true
+				return
 	#print("(%d, %d)" % [sx, sy])
 	var ix = xyToIX(sx, sy)
 	var up: bool = sy != 0 && linkDn[ix-ARY_WIDTH] != 0
@@ -285,7 +290,7 @@ func solve_FB():
 		if up && lt:		# 上・左連結済み
 			if sx < N_HORZ: non_linkRt[ix] = 1
 			if sy < N_VERT: non_linkDn[ix] = 1
-		elif up || lt:
+		elif up || lt:		# 上 or 左からの連結あり
 			if sx == N_HORZ:	# 右端の場合
 				linkDn[ix] = 1
 			elif sy == N_VERT:	# 下端の場合
@@ -293,30 +298,34 @@ func solve_FB():
 			else:
 				linkRt[ix] = 1
 				if sy < N_VERT: non_linkDn[ix] = 1
-		else:
-			if sx < N_HORZ && sy < N_VERT:
+		else:				# 上からも左からの連結も無い場合
+			if sx < N_HORZ && sy < N_VERT:	# 下端でも右端でもない場合
 				link_right(ix)
 				link_down(ix)
 				#linkRt[ix] = 1
 				#linkDn[ix] = 1
+			elif sy == N_VERT:	# 下端の場合
+				non_linkRt[ix] = 1
+			elif sx == N_HORZ:	# 右端の場合
+				non_linkDn[ix] = 1
 			else:
 				fwd = false
 	else:		# バックトラッキング中
 		if up && lt:		# 上・左連結済み
 			non_linkRt[ix] = 0
 			non_linkDn[ix] = 0
-		elif up || lt:
+		elif up || lt:		# 上 or 左からの連結あり
 			if linkRt[ix] == 1:
 				linkRt[ix] = 0
+				non_linkRt[ix] = 1
 				if sy < N_VERT:	# 下端ではない場合
-					non_linkRt[ix] = 1
 					linkDn[ix] = 1
 					non_linkDn[ix] = 0
-					fwd = true
+				fwd = true
 			else:
 				non_linkRt[ix] = 0
 				linkDn[ix] = 0
-		else:
+		else:				# 上からも左からの連結も無い場合
 			if linkRt[ix] == 1:
 				linkRt[ix] = 0
 				linkDn[ix] = 0

@@ -51,11 +51,25 @@ offset_bottom = 440.0
 color = Color(1, 1, 1, 0)
 script = ExtResource("2_pfohe")
 
-[node name="Button10Steps" type="Button" parent="."]
-offset_left = 10.0
-offset_top = 599.0
-offset_right = 82.0
-offset_bottom = 630.0
+[node name="HBC" type="HBoxContainer" parent="."]
+offset_top = 600.0
+offset_right = 500.0
+offset_bottom = 640.0
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="Button1Steps" type="Button" parent="HBC"]
+layout_mode = 2
+text = "1 steps"
+
+[node name="Button10Steps" type="Button" parent="HBC"]
+layout_mode = 2
 text = "10 steps"
 
-[connection signal="pressed" from="Button10Steps" to="." method="_on_button_10_steps_pressed"]
+[node name="Button100Steps" type="Button" parent="HBC"]
+layout_mode = 2
+text = "100 steps"
+
+[connection signal="pressed" from="HBC/Button1Steps" to="." method="_on_button_1_steps_pressed"]
+[connection signal="pressed" from="HBC/Button10Steps" to="." method="_on_button_10_steps_pressed"]
+[connection signal="pressed" from="HBC/Button100Steps" to="." method="_on_button_100_steps_pressed"]

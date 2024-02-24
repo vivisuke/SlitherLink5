@@ -114,31 +114,47 @@ func update_num_color():
 				#	print("n_edge = ", bd.n_edge(ix))
 				#	print("n_non_edge = ", bd.n_non_edge(ix))
 func _input(event):
-	if event is InputEventMouseButton && event.is_pressed():
-		if false:
-			emit_signal("cont_search")
-		else:
-			bd.solve_FB()
-			n_steps += 1
-			$NStepLabel.text = "#%d" % n_steps
-			#bd.print_mate()
-			#bd.solve_SBS(sx, sy)
-			$Board/Grid.queue_redraw()
-			update_num_color()
-			#print("is_looped() = ", bd.is_looped(bd.sx, bd.sy))
-			#print("is_solved = ", bd.is_solved())
-			#print("saticefied = ", satisfied)
-			#if !satisfied || (bd.is_looped(bd.sx, bd.sy) && !bd.is_solved()):
-			#	bd.fwd = false
-			#	bd.sx += 1
+	#if event is InputEventMouseButton && event.is_pressed():
+		#if false:
+		#	emit_signal("cont_search")
+		#else:
+		#	bd.solve_FB()
+		#	n_steps += 1
+		#	$NStepLabel.text = "#%d" % n_steps
+		#	#bd.print_mate()
+		#	#bd.solve_SBS(sx, sy)
+		#	$Board/Grid.queue_redraw()
+		#	update_num_color()
+		#	#print("is_looped() = ", bd.is_looped(bd.sx, bd.sy))
+		#	#print("is_solved = ", bd.is_solved())
+		#	#print("saticefied = ", satisfied)
+		#	#if !satisfied || (bd.is_looped(bd.sx, bd.sy) && !bd.is_solved()):
+		#	#	bd.fwd = false
+		#	#	bd.sx += 1
 	pass
 func _process(delta):
 	pass
 
 
+func _on_button_1_steps_pressed():
+	bd.solve_FB()
+	n_steps += 1
+	$NStepLabel.text = "#%d" % n_steps
+	$Board/Grid.queue_redraw()
+	update_num_color()
 func _on_button_10_steps_pressed():
 	for i in range(10):
 		bd.solve_FB()
 		n_steps += 1
-		if bd.solved: break
-	pass # Replace with function body.
+		if bd.solved || bd.failed: break
+	$NStepLabel.text = "#%d" % n_steps
+	$Board/Grid.queue_redraw()
+	update_num_color()
+func _on_button_100_steps_pressed():
+	for i in range(100):
+		bd.solve_FB()
+		n_steps += 1
+		if bd.solved || bd.failed: break
+	$NStepLabel.text = "#%d" % n_steps
+	$Board/Grid.queue_redraw()
+	update_num_color()
