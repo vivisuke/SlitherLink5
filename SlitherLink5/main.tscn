@@ -50,3 +50,12 @@ offset_right = 440.0
 offset_bottom = 440.0
 color = Color(1, 1, 1, 0)
 script = ExtResource("2_pfohe")
+
+[node name="Button10Steps" type="Button" parent="."]
+offset_left = 10.0
+offset_top = 599.0
+offset_right = 82.0
+offset_bottom = 630.0
+text = "10 steps"
+
+[connection signal="pressed" from="Button10Steps" to="." method="_on_button_10_steps_pressed"]

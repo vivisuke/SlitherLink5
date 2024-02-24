@@ -125,12 +125,19 @@ func _input(event):
 			#bd.solve_SBS(sx, sy)
 			$Board/Grid.queue_redraw()
 			update_num_color()
-			print("is_looped() = ", bd.is_looped(bd.sx, bd.sy))
-			print("is_solved = ", bd.is_solved())
-			print("saticefied = ", satisfied)
-			if !satisfied || (bd.is_looped(bd.sx, bd.sy) && !bd.is_solved()):
-				bd.fwd = false
-				bd.sx += 1
+			#print("is_looped() = ", bd.is_looped(bd.sx, bd.sy))
+			#print("is_solved = ", bd.is_solved())
+			#print("saticefied = ", satisfied)
+			#if !satisfied || (bd.is_looped(bd.sx, bd.sy) && !bd.is_solved()):
+			#	bd.fwd = false
+			#	bd.sx += 1
 	pass
 func _process(delta):
 	pass
+
+
+func _on_button_10_steps_pressed():
+	for i in range(10):
+		bd.solve_FB()
+		n_steps += 1
+	pass # Replace with function body.

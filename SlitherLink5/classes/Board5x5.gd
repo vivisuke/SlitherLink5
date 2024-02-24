@@ -196,6 +196,20 @@ func set_link_random():
 				else: links[k] = LINK_LEFT
 				
 	pass
+func is_constraint_violation():		# 制約違反状態か？
+	for y in range(N_VERT):
+		for x in range(N_HORZ):
+			var ix = xyToIX(x, y)
+			if clue_num[ix] >= 0:
+				var n = n_fixed_edge(ix)		# 確定線数
+				if n == 4:
+					if n_edge(ix) != clue_num[ix]:
+						return true
+				elif n_non_edge(ix) > 4 - clue_num[ix]:
+					return true
+				elif n_edge(ix) > clue_num[ix]:
+					return true
+	return false
 func is_solved() -> bool:
 	for y in range(N_VERT+1):
 		for x in range(N_HORZ+1):
@@ -283,6 +297,9 @@ func solve_FB():
 				#linkDn[ix] = 1
 			else:
 				fwd = false
+		if is_constraint_violation() || (is_looped(sx, sy) && !is_solved()):
+				fwd = false
+				sx += 1
 	else:		# バックトラッキング中
 		if up && lt:		# 上・左連結済み
 			non_linkRt[ix] = 0
