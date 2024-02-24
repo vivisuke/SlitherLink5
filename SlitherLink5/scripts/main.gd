@@ -21,6 +21,12 @@ const q2 = [-1,  3, -1,  2, -1,
 			 2, -1,  3, -1,  3,
 			-1,  2, -1,  2, -1,
 			]
+const q3 = [ 1,  3,  2,  2,  3,
+			 2, -1, -1, -1,  3,
+			 2, -1, -1, -1,  2,
+			 2, -1, -1, -1,  2,
+			 3,  1,  1,  1,  3,
+			]
 
 var n_steps = 0
 var bd
@@ -43,7 +49,7 @@ func _ready():
 	#bd.move_line2_down(xyToIX(2, 2))
 	#bd.make_loop_random()
 	#bd.links_to_nums()
-	bd.set_clue_num(q1)
+	bd.set_clue_num(q2)
 	init_labels()
 	update_num_labels()
 	$Board/Grid.linkRt = bd.linkRt
@@ -96,6 +102,9 @@ func update_num_color():
 						col = Color.RED
 						satisfied = false
 				elif bd.n_non_edge(ix) > 4 - bd.clue_num[ix]:
+					col = Color.RED
+					satisfied = false
+				elif bd.n_edge(ix) > bd.clue_num[ix]:
 					col = Color.RED
 					satisfied = false
 				num_labels[ix].add_theme_color_override("font_color", col)
