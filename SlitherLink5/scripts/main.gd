@@ -174,9 +174,14 @@ func _on_button_1000_steps_pressed():
 func _on_restart_button_pressed():
 	bd._init()
 	bd.set_clue_num(quest[qix])
+	update_num_labels()
 	bd.solve_FB()
 	n_steps = 1
 	$NStepLabel.text = "#%d" % n_steps
 	$Board/Grid.queue_redraw()
 	update_num_color()
+func _on_next_button_pressed():
+	qix += 1
+	if qix >= quest.size(): qix = 0
+	_on_restart_button_pressed()
 	pass # Replace with function body.

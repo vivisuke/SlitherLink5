@@ -104,3 +104,4 @@ texture_pressed = ExtResource("7_ul3n2")
 [connection signal="pressed" from="HBC1/Button100Steps" to="." method="_on_button_100_steps_pressed"]
 [connection signal="pressed" from="HBC1/Button1000Steps" to="." method="_on_button_1000_steps_pressed"]
 [connection signal="pressed" from="HBC2/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="HBC2/NextButton" to="." method="_on_next_button_pressed"]
