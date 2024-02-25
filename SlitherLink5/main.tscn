@@ -1,8 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://bpe0ph0ps171f"]
+[gd_scene load_steps=8 format=3 uid="uid://bpe0ph0ps171f"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_mg127"]
 [ext_resource type="Script" path="res://scripts/TitleBar.gd" id="1_p3c1n"]
 [ext_resource type="Script" path="res://scripts/Grid.gd" id="2_pfohe"]
+[ext_resource type="Texture2D" uid="uid://dmsndboyx8q2l" path="res://images/loop_black.png" id="4_u2dlm"]
+[ext_resource type="Texture2D" uid="uid://dvs2kh2qspi3m" path="res://images/loop_white.png" id="5_3ycjj"]
+[ext_resource type="Texture2D" uid="uid://i7a4iwx8jo3m" path="res://images/skip_next_black.png" id="6_kf4yg"]
+[ext_resource type="Texture2D" uid="uid://1o6aswmt01pe" path="res://images/skip_next_white.png" id="7_ul3n2"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_mg127")
@@ -51,30 +55,52 @@ offset_bottom = 440.0
 color = Color(1, 1, 1, 0)
 script = ExtResource("2_pfohe")
 
-[node name="HBC" type="HBoxContainer" parent="."]
+[node name="HBC1" type="HBoxContainer" parent="."]
 offset_top = 600.0
 offset_right = 500.0
 offset_bottom = 640.0
-theme_override_constants/separation = 40
+theme_override_constants/separation = 26
 alignment = 1
 
-[node name="Button1Steps" type="Button" parent="HBC"]
+[node name="Button1Steps" type="Button" parent="HBC1"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "1 steps"
 
-[node name="Button10Steps" type="Button" parent="HBC"]
+[node name="Button10Steps" type="Button" parent="HBC1"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "10 steps"
 
-[node name="Button100Steps" type="Button" parent="HBC"]
+[node name="Button100Steps" type="Button" parent="HBC1"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "100 steps"
 
-[node name="Button1000Steps" type="Button" parent="HBC"]
+[node name="Button1000Steps" type="Button" parent="HBC1"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "1000 steps"
 
-[connection signal="pressed" from="HBC/Button1Steps" to="." method="_on_button_1_steps_pressed"]
-[connection signal="pressed" from="HBC/Button10Steps" to="." method="_on_button_10_steps_pressed"]
-[connection signal="pressed" from="HBC/Button100Steps" to="." method="_on_button_100_steps_pressed"]
-[connection signal="pressed" from="HBC/Button1000Steps" to="." method="_on_button_1000_steps_pressed"]
+[node name="HBC2" type="HBoxContainer" parent="."]
+offset_left = 10.0
+offset_top = 660.0
+offset_right = 490.0
+offset_bottom = 708.0
+theme_override_constants/separation = 10
+
+[node name="RestartButton" type="TextureButton" parent="HBC2"]
+layout_mode = 2
+texture_normal = ExtResource("4_u2dlm")
+texture_pressed = ExtResource("5_3ycjj")
+
+[node name="NextButton" type="TextureButton" parent="HBC2"]
+layout_mode = 2
+texture_normal = ExtResource("6_kf4yg")
+texture_pressed = ExtResource("7_ul3n2")
+
+[connection signal="pressed" from="HBC1/Button1Steps" to="." method="_on_button_1_steps_pressed"]
+[connection signal="pressed" from="HBC1/Button10Steps" to="." method="_on_button_10_steps_pressed"]
+[connection signal="pressed" from="HBC1/Button100Steps" to="." method="_on_button_100_steps_pressed"]
+[connection signal="pressed" from="HBC1/Button1000Steps" to="." method="_on_button_1000_steps_pressed"]
+[connection signal="pressed" from="HBC2/RestartButton" to="." method="_on_restart_button_pressed"]

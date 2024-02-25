@@ -48,6 +48,11 @@ func n_edge(ix):
 func n_non_edge(ix):
 	return non_linkRt[ix] + non_linkDn[ix] + non_linkRt[ix+ARY_WIDTH] + non_linkDn[ix+1]
 func _init():
+	solved = false		# 解探索成功
+	failed = false		# 探索失敗
+	fwd = true
+	sx = -1				# 探索位置
+	sy = 0
 	clue_num.resize(ARY_SIZE)
 	clue_num.fill(ANY)
 	links.resize(ARY_SIZE)
@@ -262,7 +267,8 @@ func link_down(ix):
 	#	mate[ix+ARY_WIDTH] = ix
 # バックトラッキング探索
 func solve_FB():
-	if solved || failed: return
+	#if solved || failed: return
+	if failed: return
 	if fwd:		# 末端に向かって探索中
 		sx += 1
 		if sx > N_HORZ:
