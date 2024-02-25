@@ -33,7 +33,19 @@ const q4 = [-1,  3, -1,  1, -1,
 			 2,  2, -1,  2,  2,
 			-1,  1, -1,  1, -1,
 			]
-const quest = [q1, q2, q3, q4, ]
+const q5 = [ 2,  1, -1, -1,  1,
+			 1, -1, -1,  1, -1,
+			 1, -1,  3, -1,  1,
+			-1,  3, -1, -1,  1,
+			 2, -1, -1,  2,  2,
+			]
+const q6 = [ 2, -1, -1,  1,  0,
+			 3,  1, -1,  1, -1,
+			-1, -1,  1, -1, -1,
+			-1,  1, -1,  3,  1,
+			 3,  1, -1, -1,  3,
+			]
+const quest = [q1, q2, q3, q4, q5, q6, ]
 
 var qix = 0
 var n_steps = 0
@@ -57,6 +69,7 @@ func _ready():
 	#bd.move_line2_down(xyToIX(2, 2))
 	#bd.make_loop_random()
 	#bd.links_to_nums()
+	print("quest #", qix+1)
 	bd.set_clue_num(quest[qix])
 	init_labels()
 	update_num_labels()
@@ -173,6 +186,7 @@ func _on_button_1000_steps_pressed():
 
 func _on_restart_button_pressed():
 	bd._init()
+	print("quest #", qix+1)
 	bd.set_clue_num(quest[qix])
 	update_num_labels()
 	bd.solve_FB()

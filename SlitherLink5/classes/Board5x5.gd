@@ -47,6 +47,12 @@ func n_edge(ix):
 	return linkRt[ix] + linkDn[ix] + linkRt[ix+ARY_WIDTH] + linkDn[ix+1]
 func n_non_edge(ix):
 	return non_linkRt[ix] + non_linkDn[ix] + non_linkRt[ix+ARY_WIDTH] + non_linkDn[ix+1]
+func total_edge_cnt():
+	var cnt = 0
+	for ix in range(ARY_SIZE):
+		cnt += linkRt[ix]
+		cnt += linkDn[ix]
+	return cnt
 func _init():
 	solved = false		# 解探索成功
 	failed = false		# 探索失敗
@@ -224,11 +230,13 @@ func is_solved() -> bool:
 			if clue_num[ix] >= 0 && n_edge(ix) != clue_num[ix]:
 				return false
 	return true
-func is_looped(x, y) -> bool:
+func is_looped(x, y) -> int:
 	var ix = xyToIX(x, y)
 	var ix0 = ix
 	var ix9 = -1		# ひとつ前の位置
+	var cnt = 0			# ループを構成するエッジ数
 	while true:
+		cnt += 1
 		if linkRt[ix] != 0 && ix + 1 != ix9:
 			ix9 = ix
 			ix += 1
@@ -242,9 +250,11 @@ func is_looped(x, y) -> bool:
 			ix9 = ix
 			ix -= ARY_WIDTH
 		else:
-			return false
-		if ix == ix0: return true
-	return false
+			return 0
+		if ix == ix0:
+			#print("num edge = ", cnt)
+			return cnt
+	return 0
 func link_right(ix):
 	linkRt[ix] = 1
 	non_linkRt[ix] = 0
@@ -344,13 +354,19 @@ func solve_FB():
 	if is_constraint_violation():	# 制約違反あり
 		fwd = false
 		sx += 1
-	elif is_looped(sx, sy):
-		if is_solved():
-			solved = true
-			print("solved!")
-		else:
-			fwd = false
-			sx += 1
+	else:
+		var cnt = is_looped(sx, sy)
+		if cnt != 0:
+			if cnt == total_edge_cnt():
+				if is_solved():
+					solved = true
+					print("solved!")
+				else:
+					fwd = false
+					sx += 1
+			else:
+				fwd = false
+				sx += 1
 
 func solve_SBS(x: int, y: int):
 	var ix = xyToIX(x, y)
