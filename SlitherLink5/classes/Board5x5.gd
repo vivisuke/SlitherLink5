@@ -192,13 +192,21 @@ func move_line(ix) -> bool:
 func make_loop_random(big: bool):
 	if big: make_loop2()
 	else: make_loop()
-	for i in range(1):
+	for i in range(8):
 		var lst = []
-		for ix in range(xyToIX(5, 5)+1):
-			if links[ix] == LINK_EMPTY: lst.push_back(ix)
+		#for ix in range(xyToIX(5, 5)+1):
+		for y in range(N_VERT):
+			for x in range(N_HORZ):
+				var ix = xyToIX(x, y)
+				if( linkRt[ix] == 0 && linkDn[ix] == 0 &&
+					linkRt[ix-1] == 0 && linkDn[ix-ARY_WIDTH] == 0):
+					lst.push_back(ix)
 		lst.shuffle()
 		var moved = false
 		for k in range(lst.size()):
+			#var x = lst[k] % ARY_WIDTH
+			#var y = lst[k] / ARY_WIDTH - 1
+			#print("(%d, %d)" % [x, y])
 			if move_line(lst[k]):
 				moved = true
 				#n_empty -= 2
