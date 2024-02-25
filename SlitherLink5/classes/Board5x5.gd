@@ -87,6 +87,12 @@ func print_mate():
 			txt += "%2d " % mate[ix]
 		print(txt)
 	print()
+func make_loop2():		# 大きいループを作る
+	for i in range(N_HORZ):
+		linkRt[xyToIX(i, 0)] = 1
+		linkRt[xyToIX(i, N_VERT)] = 1
+		linkDn[xyToIX(0, i)] = 1
+		linkDn[xyToIX(N_HORZ, i)] = 1
 func make_loop():
 	linkDn[xyToIX(1, 1)] = 1
 	linkRt[xyToIX(1, 1)] = 1
@@ -183,9 +189,10 @@ func move_line(ix) -> bool:
 		if dir_order[i] == LINK_RIGHT:
 			if move_line2_right(ix): return true
 	return false
-func make_loop_random():
-	make_loop()
-	for i in range(6):
+func make_loop_random(big: bool):
+	if big: make_loop2()
+	else: make_loop()
+	for i in range(1):
 		var lst = []
 		for ix in range(xyToIX(5, 5)+1):
 			if links[ix] == LINK_EMPTY: lst.push_back(ix)

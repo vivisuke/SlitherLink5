@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bpe0ph0ps171f"]
+[gd_scene load_steps=10 format=3 uid="uid://bpe0ph0ps171f"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_mg127"]
 [ext_resource type="Script" path="res://scripts/TitleBar.gd" id="1_p3c1n"]
@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://dvs2kh2qspi3m" path="res://images/loop_white.png" id="5_3ycjj"]
 [ext_resource type="Texture2D" uid="uid://i7a4iwx8jo3m" path="res://images/skip_next_black.png" id="6_kf4yg"]
 [ext_resource type="Texture2D" uid="uid://1o6aswmt01pe" path="res://images/skip_next_white.png" id="7_ul3n2"]
+[ext_resource type="Texture2D" uid="uid://c2nhmvg30vpt5" path="res://images/question_black.png" id="8_nlqjl"]
+[ext_resource type="Texture2D" uid="uid://u1igrv37a03w" path="res://images/question_white.png" id="9_xu2r2"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_mg127")
@@ -109,9 +111,15 @@ layout_mode = 2
 texture_normal = ExtResource("6_kf4yg")
 texture_pressed = ExtResource("7_ul3n2")
 
+[node name="GenQuestButton" type="TextureButton" parent="HBC2"]
+layout_mode = 2
+texture_normal = ExtResource("8_nlqjl")
+texture_pressed = ExtResource("9_xu2r2")
+
 [connection signal="pressed" from="HBC1/Button1Steps" to="." method="_on_button_1_steps_pressed"]
 [connection signal="pressed" from="HBC1/Button10Steps" to="." method="_on_button_10_steps_pressed"]
 [connection signal="pressed" from="HBC1/Button100Steps" to="." method="_on_button_100_steps_pressed"]
 [connection signal="pressed" from="HBC1/Button1000Steps" to="." method="_on_button_1000_steps_pressed"]
 [connection signal="pressed" from="HBC2/RestartButton" to="." method="_on_restart_button_pressed"]
 [connection signal="pressed" from="HBC2/NextButton" to="." method="_on_next_button_pressed"]
+[connection signal="pressed" from="HBC2/GenQuestButton" to="." method="_on_gen_quest_button_pressed"]

@@ -208,3 +208,11 @@ func _on_next_button_pressed():
 	$QuestLabel.text = "q%d:" % (qix+1)
 	_on_restart_button_pressed()
 	pass # Replace with function body.
+
+
+func _on_gen_quest_button_pressed():
+	bd._init()
+	bd.make_loop_random(true)
+	update_num_labels()
+	$Board/Grid.queue_redraw()
+	pass # Replace with function body.
