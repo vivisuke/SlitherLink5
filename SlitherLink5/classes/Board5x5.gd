@@ -29,6 +29,7 @@ var mate = []			# 連結状態保持配列、mate[ix] == ix for 非連結点,
 var dir_order = [LINK_UP, LINK_DOWN, LINK_LEFT, LINK_RIGHT]
 var solved = false		# 解探索成功
 var failed = false		# 探索失敗
+var n_solved = 0		# 発見解数
 var fwd = true
 var sx = -1				# 探索位置
 var sy = 0
@@ -55,6 +56,7 @@ func total_edge_cnt():
 	return cnt
 func _init():
 	solved = false		# 解探索成功
+	n_solved = 0
 	failed = false		# 探索失敗
 	fwd = true
 	sx = -1				# 探索位置
@@ -285,10 +287,11 @@ func solve_FB():
 			sx = 0
 			sy += 1
 			if sy > N_VERT:
-				if is_solved():
-					fwd = false
-					sy -= 1
-					sx = N_HORZ + 1
+				#if is_solved():
+				#	n_solved += 1
+				fwd = false
+				sy -= 1
+				sx = N_HORZ + 1
 	if !fwd:		# バックトラッキング中
 		sx -= 1
 		if sx < 0:
@@ -359,11 +362,12 @@ func solve_FB():
 		if cnt != 0:
 			if cnt == total_edge_cnt():
 				if is_solved():
+					n_solved += 1
 					solved = true
 					print("solved!")
-				else:
-					fwd = false
-					sx += 1
+				#else:
+				fwd = false
+				sx += 1
 			else:
 				fwd = false
 				sx += 1

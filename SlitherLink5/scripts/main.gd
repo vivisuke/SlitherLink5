@@ -9,6 +9,12 @@ const CELL_WIDTH = 80
 const ARY_WIDTH = N_HORZ + 2		# 壁あり
 const ARY_HEIGHT = N_VERT + 3		# 壁あり
 const ARY_SIZE = ARY_WIDTH * ARY_HEIGHT
+const q0 = [ 3, -1, -1, -1,  3,
+			-1,  3, -1,  3, -1,
+			-1, -1, -1, -1, -1,
+			-1,  3, -1,  3, -1,
+			 3, -1, -1, -1,  3,
+			]
 const q1 = [-1,  3, -1,  3, -1,
 			 2, -1, -1, -1,  2,
 			-1, -1,  2, -1, -1,
@@ -45,7 +51,7 @@ const q6 = [ 2, -1, -1,  1,  0,
 			-1,  1, -1,  3,  1,
 			 3,  1, -1, -1,  3,
 			]
-const quest = [q1, q2, q3, q4, q5, q6, ]
+const quest = [q0, q1, q2, q3, q4, q5, q6, ]
 
 var qix = 0
 var n_steps = 0
@@ -170,9 +176,11 @@ func do_n_steps(N):
 	for i in range(N):
 		bd.solve_FB()
 		n_steps += 1
-		if bd.solved || bd.failed: break
+		if bd.failed || bd.n_solved > 1: break
+		#if bd.solved || bd.failed: break
 	var end = Time.get_ticks_msec()
 	print("dur = ", end - start, "msec")
+	print("n_solved = ", bd.n_solved)
 	$NStepLabel.text = "#%d" % n_steps
 	$Board/Grid.queue_redraw()
 	update_num_color()
@@ -197,5 +205,6 @@ func _on_restart_button_pressed():
 func _on_next_button_pressed():
 	qix += 1
 	if qix >= quest.size(): qix = 0
+	$QuestLabel.text = "q%d:" % (qix+1)
 	_on_restart_button_pressed()
 	pass # Replace with function body.
